@@ -5,7 +5,16 @@
         let page = document.createElement("p");
         document.body.appendChild(page);        //créer un élément texte et l'ajoute au body
         page.textContent = Math.floor(Math.random()*1000000000).toString();//ajoute un nb random au p
+
+        function reload(min, max){
+            let nb=Math.random()*max;
+            while (nb <= min){nb = Math.random()*max;}
+            nb = Math.round(nb);
+            nb = nb.toString();
+            page.textContent = nb;
+        }
         </script>
+        <button onclick="reload(-1000000000, 1000000000)" type="reset">reload</button>
 
 <style>
     body{
@@ -16,6 +25,5 @@
         font-size: 50px;
         color: white;
     }
-</style>
 
 </body>
