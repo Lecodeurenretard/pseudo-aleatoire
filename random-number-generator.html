@@ -4,26 +4,57 @@
     <script>
         let page = document.createElement("p");
         document.body.appendChild(page);        //créer un élément texte et l'ajoute au body
+        page.classList.add("txt");              //lui met la class "txt"
+        page.setAttribute("id", "NB")
         page.textContent = Math.floor(Math.random()*1000000000).toString();//ajoute un nb random au p
+        var err = document.createElement("p")
 
         function reload(min, max){
-            let nb=Math.random()*max;
-            while (nb <= min){nb = Math.random()*max;}
-            nb = Math.round(nb);
-            nb = nb.toString();
-            page.textContent = nb;
+            if (!(min<=max)) {                              //if min n'est pas inférieur ou égal à max
+                let nb = Math.random() * 1000000000;
+                while (nb <= min){nb = Math.random()*1000000000;}  //si nb est supérieur à min on répète l'opération autant de fois que nécéssaire
+                nb = Math.round(nb);
+                page.textContent = nb;
+                console.log("minimum supérieur au maximum, nombre entre les valeurs de base.\nLe nombre est: " + nb);
+            }else{
+                let nb=Math.random()*max;                   //nb = nombre random
+                while (nb <= min){nb = Math.random()*max;}  //si nb est supérieur à min on répète l'opération autant de fois que nécéssaire
+                nb = Math.round(nb);
+                nb = nb.toString();                         //on les tient prêts pour l'affichage sur la page
+                page.textContent = nb;
+                console.log(nb + " généré entre " + min + " et " + max);
+            }
+        }
+
+        function getInputs(){                                           //pont entre le HTMl et la fonction reload()
+            var minHtml = document.getElementById("nb-min");
+            var maxHtml = document.getElementById("nb-max");
+            min= parseInt(minHtml, 10); max = parseInt(maxHtml, 10);    //on convertit les entées en nombres
+            min = minHtml.value;
+            max = maxHtml.value;
+
+            reload(min, max);
         }
         </script>
-        <button onclick="reload(-1000000000, 1000000000)" type="reset">reload</button>
 
-<style>
-    body{
-        background-color: rgb(5, 0, 10);
-    }
-                /*pas besoin de commentaire ici*/
-    p{
-        font-size: 50px;
-        color: white;
-    }
+    <form method="POST">
+        <input type="number" id="nb-min"><span class="txt">valeur minimale <br /></span>
+        <input type="number" id="nb-max"><span class="txt">valeur maximale <br /></span>
+        <button onclick="getInputs()" type="button" id="reload-button">reload</button>
+    </form>
 
+
+    <style>
+        body{
+            background-color: rgb(5, 0, 10);
+        }
+                    /*pas besoin de commentaire ici*/
+        #NB{
+            font-size: 50px;
+        }
+
+        .txt{
+            color: white;
+        }
+        </style>
 </body>
