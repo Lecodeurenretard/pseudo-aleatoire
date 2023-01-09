@@ -29,6 +29,12 @@
         function getInputs(){                                           //pont entre le HTMl et la fonction reload()
             var minHtml = document.getElementById("nb-min");
             var maxHtml = document.getElementById("nb-max");
+            if (minHtml.value === "") {
+                minHtml = "-1000000000";    //je le met en string car je n'ai pas à mettre les parseInt dans des else
+            }
+            if (maxHtml.value === "") {
+                maxHtml = "1000000000";
+            }
             min= parseInt(minHtml, 10); max = parseInt(maxHtml, 10);    //on convertit les entées en nombres
             min = minHtml.value;
             max = maxHtml.value;
