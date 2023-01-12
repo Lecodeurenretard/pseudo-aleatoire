@@ -12,15 +12,15 @@
         document.body.appendChild(err);
 
         function reload(min, max){
-            if (!(min<=max)) {                              //if min n'est pas inférieur ou égal à max
-                nb = aleatoire(-1000000000, 1000000000, false).toString();
-                console.warn("minimum supérieur au maximum, nombre entre les valeurs de base.\n");
-                console.log("Le nombre est: " + nb);
-            }else{
-                nb = aleatoire(min, max, false).toString();
+            if (min<max) {
+                nb = aleatoire(min, max, false);
                 console.log(nb + " généré entre " + min + " et " + max);
+            }else{
+                nb = aleatoire(-1000000000, 1000000000, false);
+                console.warn("minimum supérieur ou égal au maximum, nombre calculé entre les valeurs de base.\n");
+                console.log("Le nombre est: " + nb);
             }
-            page.textContent = nb;
+            page.textContent = nb.toString();
             return nb;
         }
 
@@ -30,18 +30,26 @@
             let min; let max;
             if (maxHtml.value === "") {
                 max = 1000000000;    //je le met en string car je n'ai pas à mettre les parseInt dans des else
-                console.warn("Valeur de maxHtml non spécifiée donc rapportée à 10^9.")
+                console.warn("Valeur de maxHtml non spécifiée donc rapportée à 10^9." + max.toString())
+            }else{
+                max = parseInt(maxHtml.value, 10); //on convertit les entées en nombres
             }
             if (minHtml.value === "") {
                 min = max * -1;
-                console.warn("Valeur de minHtml non spécifiée donc rapportée à l'inverse du maximum.\n soit: " + (max * -1).toString())
+                console.warn("Valeur de minHtml non spécifiée donc rapportée à l'inverse du maximum.\n soit: " + min.toString())
+            }else{
+                min= parseInt(minHtml.value, 10);
             }
-            min= parseInt(minHtml.value, 10); 
-            max = parseInt(maxHtml.value, 10);    //on convertit les entées en nombres
 
-            if(reload(min, max) == "undefined"){             //si reload ne return pas une int alors...
+
+            
+                
+
+            let r = reload(min, max); //r pour return
+
+            if(typeof(r) !="number"){             //si reload ne return pas un nombre alors...
                 page.textContent = "Erreur, fonction 'reload()', please try again."
-                console.error("fonction reload at l 42")
+                console.error("fonction reload at l 42.\n Returned '" + r.toString() + "' of type '" + typeof(r) + "'.")
             }
         }
         </script>
