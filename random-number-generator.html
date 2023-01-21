@@ -44,7 +44,7 @@
                 min= parseInt(minHtml.value, 10);
             }
 
-            let r = reload(min, max, virgules.value); //r pour return
+            let r = reload(min, max, virgules.checked); //r pour return
 
             if(typeof(r) !="number"){             //si reload ne return pas un nombre alors...
                 page.textContent = "Erreur, fonction 'reload()', please try again."
@@ -56,7 +56,7 @@
     <form method="POST">
         <input type="number" id="nb-min"><span class="txt">valeur minimale <br /></span>
         <input type="number" id="nb-max"><span class="txt">valeur maximale <br /></span>
-        <input type="radio" id="floats-enabled"><span class="txt">nombres à virgules inclus?</span><br />
+        <input type="checkbox" id="floats-enabled"><span class="txt">nombres à virgules inclus?</span><br />
         <button onclick="getInputs()" type="button" id="reload-button">reload</button>
     </form>
 
