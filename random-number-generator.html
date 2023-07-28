@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8" />
+</head>
+
+<body>
+    <script>
+        function aleatoire(/*float*/min, /*float*/max, /*bool*/ reel) {
+            alea = Math.random()  * (max - min) + min;
+            if(!reel){alea=Math.round(alea)}
+            return alea;
+        }
+
+        let page = document.createElement("p");
+        document.body.appendChild(page);        //créer un élément texte et l'ajoute au body
+        page.classList.add("txt");              //lui met la class "txt"
+        page.setAttribute("id", "NB")
+        page.textContent = aleatoire(undefined, 1000000000, false).toString();//ajoute un nb random au p
+        var err = document.createElement("p")
+        document.body.appendChild(err);
+
+        function reload(min, max, virgules){
+            if (min<max) {
+                nb = aleatoire(min, max, virgules);
+                console.log(nb + " généré entre " + min + " et " + max);
+            }else{
+                nb = aleatoire(-1000000000, 1000000000, virgules);
+                console.warn("minimum supérieur ou égal au maximum, nombre calculé entre les valeurs de base.\n");
+                console.log("Le nombre est: " + nb);
+            }
+            if (virgules) {console.info("Note, c'est un float.");}
+
+            page.textContent = nb.toString();
+            return nb;
+        }
+
+        function getInputs(){                                           //pont entre le HTMl et la fonction reload()
+            var minHtml = document.getElementById("nb-min");
+            var maxHtml = document.getElementById("nb-max");
+            var virgules = document.getElementById("floats-enabled");
+            let min; let max;
+            if (maxHtml.value === "") {
+                max = 1000000000;    //je le met en string car je n'ai pas à mettre les parseInt dans des else
+                console.warn("Valeur de maxHtml non spécifiée donc rapportée à 10^9." + max.toString())
+            }else{
+                max = parseInt(maxHtml.value, 10); //on convertit les entées en nombres
+            }
+            if (minHtml.value === "") {
+                min = max * -1;
+                console.warn("Valeur de minHtml non spécifiée donc rapportée à l'inverse du maximum.\n soit: " + min.toString())
+            }else{
+                min= parseInt(minHtml.value, 10);
+            }
+
+            let r = reload(min, max, virgules.checked); //r pour return
+
+            if(typeof(r) !="number"){             //si reload ne return pas un nombre alors...
+                page.textContent = "Erreur, fonction 'reload()', please try again."
+                console.error("fonction reload at l 42.\n Returned '" + r.toString() + "' of type '" + typeof(r) + "'.")
+            }
+        }
+        </script>
+
+    <form method="POST">
+        <input type="number" id="nb-min"><span class="txt">valeur minimale <br /></span>
+        <input type="number" id="nb-max"><span class="txt">valeur maximale <br /></span>
+        <input type="checkbox" id="floats-enabled"><span class="txt">nombres à virgules inclus?</span><br />
+        <button onclick="getInputs()" type="button" id="reload-button">reload</button>
+    </form>
+
+
+    <style>
+        body{
+            background-color: rgb(5, 0, 10);
+        }
+                    /*pas besoin de commentaire ici*/
+        #NB{
+            font-size: 50px;
+        }
+
+        .txt{
+            color: white;
+        }
+        </style>
+</body>
