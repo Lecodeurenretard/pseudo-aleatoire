@@ -1,28 +1,22 @@
 <!DOCTYPE html>
-
-<<<<<<< HEAD
 <head>
     <meta charset="utf-8" />
-</head>
 
-<body>
     <script>
         function aleatoire(/*float*/min, /*float*/max, /*bool*/ reel) {
             alea = Math.random()  * (max - min) + min;
             if(!reel){alea=Math.round(alea)}
             return alea;
         }
-
-=======
+    </script>
+</head>
 <body>
-    <script src="../javascript/fonctions-utiles.js"></script>
     <script>
->>>>>>> 3372bdf0a6c15212fbf66d6818009d8e1f5d10bd
         let page = document.createElement("p");
         document.body.appendChild(page);        //créer un élément texte et l'ajoute au body
         page.classList.add("txt");              //lui met la class "txt"
         page.setAttribute("id", "NB")
-        page.textContent = aleatoire(undefined, 1000000000, false).toString();//ajoute un nb random au p
+        page.textContent = aleatoire(-10^9, 10^9, false).toString();//ajoute un nb random au p
         var err = document.createElement("p")
         document.body.appendChild(err);
 
@@ -31,7 +25,7 @@
                 nb = aleatoire(min, max, virgules);
                 console.log(nb + " généré entre " + min + " et " + max);
             }else{
-                nb = aleatoire(-1000000000, 1000000000, virgules);
+                nb = aleatoire(-10^9, 10^9, virgules);
                 console.warn("minimum supérieur ou égal au maximum, nombre calculé entre les valeurs de base.\n");
                 console.log("Le nombre est: " + nb);
             }
@@ -47,13 +41,13 @@
             var virgules = document.getElementById("floats-enabled");
             let min; let max;
             if (maxHtml.value === "") {
-                max = 1000000000;    //je le met en string car je n'ai pas à mettre les parseInt dans des else
+                max = 10^9;    //je le met en string car je n'ai pas à mettre les parseInt dans des else
                 console.warn("Valeur de maxHtml non spécifiée donc rapportée à 10^9." + max.toString())
             }else{
                 max = parseInt(maxHtml.value, 10); //on convertit les entées en nombres
             }
             if (minHtml.value === "") {
-                min = max * -1;
+                min = -max;
                 console.warn("Valeur de minHtml non spécifiée donc rapportée à l'inverse du maximum.\n soit: " + min.toString())
             }else{
                 min= parseInt(minHtml.value, 10);
