@@ -21,13 +21,26 @@
         }
     </style>
     <script>
-        function aleatoire(/*float*/min, /*float*/max, /*bool*/ reel) {
-            let alea = Math.random()  * (max - min) + min;
-         
-            console.log(alea);
-            if(!reel){alea=Math.round(alea);}    //appartient à R 
+        function entierNat(float){      //fait appartenir float à N
+            return  Math.round(Math.abs(float));
+        }
 
-            return alea;
+
+        function round(/*float*/nb, /*unsigned int*/precision){//combien de chiffres après la virgule
+            precision = entierNat(precision);
+
+            dix = 10**precision;
+            nb*= dix;
+            nb = Math.round(nb);
+            nb /= dix;
+
+            return nb;
+        }
+
+        function aleatoire(/*float*/min, /*float*/max, /*unsigned int*/ precision) {
+            let alea = Math.random()  * (max - min) + min;
+           
+            return round(alea, precision);
         }
     </script>
 </head>
@@ -38,20 +51,20 @@
         document.body.appendChild(page);        //créer un élément texte et l'ajoute au body
         page.classList.add("txt");              //lui met la class "txt"
         page.setAttribute("id", "NB")
-        page.textContent = aleatoire(-(10**3), 10**3, false).toString();//ajoute un nb random au p
+        page.textContent = aleatoire(-(10**3), 10**3, 0).toString();//ajoute un nb random au p
         var err = document.createElement("p")
         document.body.appendChild(err);
 
-        function reload(min, max, virgules){
+        function reload(min, max, accuracy){
             if (min<max) {
-                nb = aleatoire(min, max, virgules);
+                nb = aleatoire(min, max, accuracy);
                 console.log(nb + " généré entre " + min + " et " + max);
             }else{
-                nb = aleatoire(-(10**3), 10**3, virgules);
+                nb = aleatoire(-(10**3), 10**3, accuracy);
                 console.warn("minimum supérieur ou égal au maximum, nombre calculé entre les valeurs de base.\n");
                 console.log("Le nombre est: " + nb);
             }
-            if (virgules) {console.info("Note, c'est un float.");}
+          console.info("Affiché avec une précision de " + accuracy.toString());
 
             page.textContent = nb.toString();
             return nb;
@@ -60,34 +73,41 @@
         function getInputs(){                                           //pont entre le HTMl et la fonction reload()
             var minHtml = document.getElementById("nb-min");
             var maxHtml = document.getElementById("nb-max");
-            var virgules = document.getElementById("floats-enabled");
-            let min; let max;
-            if (maxHtml.value === "") {
+            var decimal = document.getElementById("prec");
+            let min, max, acc;
+            if (maxHtml.value == "") {
                 max = 10**3;    //je le met en string car je n'ai pas à mettre les parseInt dans des else
                 console.warn("Valeur de maxHtml non spécifiée donc rapportée à 10^3.")
             }else{
                 max = parseInt(maxHtml.value, 10); //on convertit les entées en nombres
             }
-            if (minHtml.value === "") {
+            if (minHtml.value == "") {
                 min = max * -1;
                 console.warn("Valeur de minHtml non spécifiée donc rapportée à l'inverse du maximum.\n soit: " + min.toString())
             }else{
                 min= parseInt(minHtml.value, 10);
             }
+            if (decimal.value == '') {
+                acc = 0;
+                console.warn("Valeur de decimal non spécifiée donc mise à 0 (nombre entier).");
+            }else{
+                acc = parseInt(decimal.value, 10);
+                if(acc > 10){acc = 10;}
+            }
 
-            let r = reload(min, max, virgules.checked); //r pour return
+            let r = reload(min, max, acc); //r pour return
 
             if(typeof(r) !="number"){             //si reload ne return pas un nombre alors...
                 page.textContent = "Erreur, fonction 'reload()', please try again."
-                console.error("fonction reload at l 42.\n Returned '" + r.toString() + "' of type '" + typeof(r) + "'.")
+                console.error("fonction reload in getInputs().\n Returned '" + r.toString() + "' of type '" + typeof(r) + "'.")
             }
         }
         </script>
 
     <form method="POST">
-        <label class="row txt"></label><input type="number" id="nb-min"> Valeur minimale</label>
-        <label class="row txt"></label><input type="number" id="nb-max"> Valeur maximale</label>
-        <label class="row txt"><input type="checkbox" id="floats-enabled"> Nombres à virgules inclus?</label>
-        <button onclick="getInputs()" type="button" id="reload-button">reload</button>
+        <label class="row txt"><input type="number" id="nb-min"> Valeur minimale</label>
+        <label class="row txt"><input type="number" id="nb-max"> Valeur maximale</label>
+        <label class="row txt"><input type="number" maxlength="2" placeholder="10 maximum" id="prec" /> Nombre de décimales</label>
+        <button type="button" onclick="getInputs()">Avoir un nombre aléatoire</button>
     </form>
 </body>
